@@ -4,7 +4,7 @@ GeoJSON をアップロードして MVT（Mapbox Vector Tiles）に変換する�
 変換処理は AWS 側で行い、このリポジトリはフロントエンドのみを管理します。
 
 ```text
-Frontend (S3 + CloudFront)
+Frontend
   │  POST /jobs, POST /jobs/{id}/start, GET /jobs/{id}
   ▼
 API Gateway → Lambda（api/）→ ECS RunTask → Fargate（mvt-docker/, tippecanoe）→ S3（jobs/{jobId}/output.zip）
@@ -92,18 +92,3 @@ echo "VITE_API_BASE_URL=$(terraform -chdir=terraform output -raw api_url)" > .en
 
 - API Gateway: フロントエンドのオリジンから `POST` / `GET` を許可
 - アップロード用 S3 バケット: `PUT` と `Content-Type` ヘッダーを許可
-- タイル配信（CloudFront / S3）: `GET` を許可
-
-## デプロイ
-
-`main` への push で [.github/workflows/deploy.yml](.github/workflows/deploy.yml) が走り、ビルド結果を S3 に配置して CloudFront のキャッシュを無効化します。
-
-GitHub リポジトリに以下を設定してください。
-
-| 種類     | 名前                         | 内容                                    |
-| -------- | ---------------------------- | --------------------------------------- |
-| Secret   | `AWS_ROLE_ARN`               | GitHub OIDC で AssumeRole する IAM ロール |
-| Variable | `AWS_REGION`                 | 例: `ap-northeast-1`                    |
-| Variable | `S3_BUCKET`                  | フロントエンド配信用バケット名          |
-| Variable | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront ディストリビューション ID    |
-| Variable | `VITE_API_BASE_URL`          | API Gateway のベース URL                |
