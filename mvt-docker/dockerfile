@@ -1,0 +1,22 @@
+FROM ubuntu:24.04
+
+RUN apt-get update && \
+    apt-get install -y \
+      tippecanoe \
+      zip \
+      unzip \
+      curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Fargate Task（ARM64）に合わせて ARM64 版の AWS CLI を入れる
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" \
+      -o "/tmp/awscliv2.zip" && \
+    unzip /tmp/awscliv2.zip -d /tmp && \
+    /tmp/aws/install && \
+    rm -rf /tmp/aws /tmp/awscliv2.zip
+
+COPY convert.sh /app/convert.sh
+
+RUN chmod +x /app/convert.sh
+
+ENTRYPOINT ["/app/convert.sh"]

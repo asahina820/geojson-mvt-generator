@@ -1,0 +1,395 @@
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --text: #1c1c1a;
+  --muted: #6b6b66;
+  --border: #e2e2dd;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff4ff;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --radius: 8px;
+
+  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --surface: #1f1f1d;
+    --text: #ececea;
+    --muted: #9a9a94;
+    --border: #33332f;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --accent-soft: #1e293b;
+    --danger: #f87171;
+    --success: #4ade80;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+h1,
+h2,
+p,
+dl {
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.header h1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* 画面全体 */
+.main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.main.is-centered {
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* アップロード / 変換中 / 失敗 のカード */
+.card {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.file-name {
+  word-break: break-all;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dropzone */
+.dropzone {
+  padding: 48px 16px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible,
+.dropzone.is-dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.dropzone.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropzone-title {
+  font-weight: 600;
+}
+
+.dropzone-sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 進捗 */
+.steps {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.steps li {
+  flex: 1;
+  text-align: center;
+  padding-top: 6px;
+  border-top: 3px solid var(--border);
+}
+
+.steps li.done {
+  border-color: var(--success);
+  color: var(--text);
+}
+
+.steps li.active {
+  border-color: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.bar > div {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.bar.is-indeterminate > div {
+  width: 30%;
+  animation: indeterminate 1.2s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+
+/* 完了画面 */
+.result {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  min-height: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 20px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.panel .file-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.status-done {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  font-size: 13px;
+}
+
+.summary dt {
+  color: var(--muted);
+}
+
+.summary dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+input[type='text'] {
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  width: 100%;
+}
+
+input[type='text']:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font: inherit;
+  font-weight: 600;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+}
+
+.button:hover {
+  background: var(--accent-hover);
+}
+
+.button.secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.button.secondary:hover {
+  background: var(--bg);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  word-break: break-all;
+}
+
+/* Map */
+.map-wrap {
+  position: relative;
+  min-height: 0;
+}
+
+/* maplibre-gl.css の .maplibregl-map { position: relative } に負けないよう詳細度を上げる */
+.map-wrap > .map {
+  position: absolute;
+  inset: 0;
+}
+
+.map-note {
+  position: absolute;
+  left: 12px;
+  right: 56px;
+  top: 12px;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .app {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .result {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55vh auto;
+  }
+
+  .panel {
+    border-right: none;
+    overflow: visible;
+  }
+
+  .map-wrap {
+    order: -1;
+  }
+}
